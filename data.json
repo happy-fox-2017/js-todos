@@ -1,1 +1,47 @@
-[]
+[
+   {
+      "id": 1,
+      "task": "makan malam",
+      "completed": true,
+      "create_at": "2017-05-31T11:53:32.288Z",
+      "complete_at": "2017-05-31T14:41:05.106Z",
+      "tags": [
+         "makan"
+      ]
+   },
+   {
+      "id": 2,
+      "task": "makan siang",
+      "completed": true,
+      "create_at": "2017-05-31T12:32:32.459Z",
+      "complete_at": "2017-05-31T14:39:05.496Z",
+      "tags": [
+         "antoni",
+         "angga"
+      ]
+   },
+   {
+      "id": 3,
+      "task": "makan",
+      "completed": true,
+      "create_at": "2017-05-31T12:34:11.929Z",
+      "complete_at": "2017-05-31T14:36:49.412Z",
+      "tags": []
+   },
+   {
+      "id": 4,
+      "task": "makan malam",
+      "completed": false,
+      "create_at": "2017-05-31T14:33:35.834Z",
+      "complete_at": "kosong",
+      "tags": []
+   },
+   {
+      "id": 5,
+      "task": "gosok gigi",
+      "completed": false,
+      "create_at": "2017-05-31T16:04:22.578Z",
+      "complete_at": "kosong",
+      "tags": []
+   }
+]

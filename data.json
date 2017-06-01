@@ -1,1 +1,1 @@
-[]
+[{"id":0,"task":"makan nasi","complete":true,"dateCompleted":"2017-06-01T22:45:34.599Z","tag":["makan"]},{"id":1,"task":"makan sapi gulai","complete":true,"dateCompleted":"2017-06-01T22:45:08.908Z"},{"id":2,"task":"makan ajaah","complete":true,"dateCompleted":"2017-05-05T14:42:27.983Z","tag":["makan"]},{"id":3,"task":"makan siang","complete":false,"dateCompleted":"","tag":[]},{"id":4,"task":"makan ayam","complete":false,"dateCompleted":"","tag":[]},{"id":5,"task":"kerjain UI","complete":false,"dateCompleted":"","tag":["kerja"]}]

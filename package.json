@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/happy-fox-2017/js-todos#readme",
   "dependencies": {
-    "cli-table": "^0.3.1"
+    "cli-table": "^0.3.1",
+    "date-and-time": "^0.4.0"
   }
 }

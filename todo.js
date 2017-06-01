@@ -1,9 +1,12 @@
 const fs = require("fs")
 const Table = require("cli-table");
+const date = require('date-and-time');
 
 class Model{
   constructor(){
+    let datenow = new Date();
     this.filename = "./data.json";
+    this.datenowFormated = date.format(datenow, "YYYY/MM/DD HH:mm:ss");
   }
   readfile(){
     return JSON.parse(fs.readFileSync(this.filename, 'utf8'));
@@ -18,16 +21,16 @@ class Model{
     newdata["id"] = 0;
     newdata["task"] = taskWord;
     newdata["completed"] = false;
-    newdata["create_at"] = new Date();
+    newdata["create_at"] = this.datenowFormated
     newdata["complete_at"] = "kosong";
     newdata["tags"] = [];
     data.push(newdata);
-    data = this.sortId(data);
+    data = this.generateId(data);
     this.writeData(data);
-    console.log(`Your Data is Added ${newdata.task} and ID is ${newdata.id}`);
+    return `Your Data is Added ${newdata.task} and ID is ${newdata.id}`;
   }
   
-  sortId(data){
+  generateId(data){
     for (var i = 0; i < data.length; i++) {
       data[i].id = i+1;
     }
@@ -43,10 +46,10 @@ class Model{
         }
       }
     }
-    return "Maaf Data yang di cari tidak ada";
+    return null;
   }
   
-  delete(id){
+  deleteTask(id){
     let data = this.readfile();
     for (var i = 0; i < data.length; i++) {
       if(data[i].id == id){
@@ -63,7 +66,7 @@ class Model{
     for (var i = 0; i < data.length; i++) {
       if (data[i].id == id) {
         data[i].completed = true;
-        data[i].complete_at = new Date();
+        data[i].complete_at = this.datenowFormated;
         this.writeData(data);
         return `Your Update Complete ${id} is True now`;
       }
@@ -78,7 +81,7 @@ class Model{
         data[i].completed = false;
         data[i].complete_at = "kosong";
         this.writeData(data);
-        return `Your Update uncomplete ${id} is True now`;
+        return `Your Update uncomplete ${id} is False now`;
       }
     }
     return `Your Update ID ${id} is not Find`;
@@ -119,7 +122,7 @@ class View{
   vlist(data){
     let tablelist = new Table({
       head : ['id','task', 'completed', 'create_at', 'complete_at','tags'],
-      colWidths : [7,20,20,40,20,20]
+      colWidths : [7,20,20,28,28,20]
     })
     for (var i = 0; i < data.length; i++) {
       tablelist.push([data[i].id,data[i].task,data[i].completed,data[i].create_at,data[i].complete_at,data[i].tags]);
@@ -130,32 +133,34 @@ class View{
   vlistbyid(data){
     let tablelist = new Table({
       head : ['id','task', 'completed', 'create_at', 'complete_at', 'tags'],
-      colWidths : [7,20,20,40,20,20]
+      colWidths : [7,20,20,28,28,20]
     })
     tablelist.push([data.id,data.task,data.completed,data.create_at,data.complete_at,data.tags]);
     console.log(tablelist.toString());
   }
   
   vSortingDesc(data){
-    //Desceding dari yang Kecil sampe yang Besar
+    //Desceding dari yang Besar sampe yang Kecil
     let dataSortingDesc = data.sort((a,b) => {
-      return new Date(b.created_at) - new Date(a.created_at);
+      var dateA = new Date(a.create_at).getTime();
+      var dateB = new Date(b.create_at).getTime();
+      return dateA < dateB ? 1 : -1;  
     });
-    //this.vlist(dataSortingDesc);
-    console.log(dataSortingDesc);
+    this.vlist(dataSortingDesc);
+  }
+  
+  vPrintConsole(word){
+    console.log(word);
   }
   
   vSortingAsc(data){
-    //Asceding dari yang Besar sampe yang Kecil
-    let dataSortingAsc = data.sort((a,b) =>{
-      return new Date(a.created_at) - new Date(a.created_at);
+    //Asceding dari yang Kecil sampe yang Besar
+    let dataSortingAsc = data.sort((a,b) => {
+      var dateA = new Date(a.create_at).getTime();
+      var dateB = new Date(b.create_at).getTime();
+      return dateA > dateB ? 1 : -1;  
     });
-    // this.vlist(dataSortingAsc);
-    console.log(dataSortingDesc);
-  }
-  
-  vDelete(word){
-    console.log(word);
+    this.vlist(dataSortingAsc);
   }
   
   vSortingComplete(data){
@@ -189,7 +194,6 @@ class Controller{
   
   run(param){
     let data = this.Model.readfile();
-    
     switch (param[0]) {
       case "help" :
         this.View.vHelper();
@@ -198,13 +202,13 @@ class Controller{
         this.View.vlist(data)
         break;
       case "list:outstanding" :
-        this.View.vSortingDesc(data);
-        break;
-      case "list:outstanding asc" :
-        this.View.vSortingAsc(data);
-        break;
-      case "list:outstanding desc" :
-        this.View.vSortingDesc(data);
+        if(param[1] == null){
+          this.View.vSortingDesc(data);
+        } else if(param[1] == "asc"){
+          this.View.vSortingAsc(data);
+        } else if(param[1] == "desc"){
+          this.View.vSortingDesc(data);
+        }
         break;
       case "list:complete" :
         this.View.vSortingComplete(data);
@@ -218,27 +222,31 @@ class Controller{
         break;
       case "add" :
         param.shift();
-        this.Model.add(param.join(" "));
+        let result = this.Model.add(param.join(" "));
+        this.View.vPrintConsole(result);
         break;
       case "task" :
         param.shift();
-        this.View.vlistbyid(this.Model.find(param));
+        if(this.Model.find(param) == null){
+          this.View.vPrintConsole(`404 your Id cant Find`);
+        }else {        
+          this.View.vlistbyid(this.Model.find(param));
+        }
         break;
       case "delete" :
         param.shift();
-        let datadelete = this.Model.delete(param);
-        this.View.vDelete(datadelete);
-        //this.View.vlist(data);
+        let resultDelete = this.Model.deleteTask(param);
+        this.View.vPrintConsole(resultDelete);
         break;
       case "complete" :
         param.shift();
-        this.Model.UpdateComplete(param);
-        //this.View.vlist(data);
+        let resultCompelete = this.Model.UpdateComplete(param);
+        this.View.vPrintConsole(resultCompelete);
         break;
       case "uncomplete" :
         param.shift();
-        this.Model.UpdateUncomplete(param);
-      //  this.View.vlist(data);
+        let resultUncomplete = this.Model.UpdateUncomplete(param);
+        this.View.vPrintConsole(resultUncomplete);
         break;
       case "filter" :
         param.shift();

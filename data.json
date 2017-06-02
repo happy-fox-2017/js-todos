@@ -1,1 +1,20 @@
-[]
+[
+   {
+      "id": 1,
+      "task": "kerjain tugas weekly",
+      "completed": false,
+      "created_at": "2017-05-06T07:09:22.258Z",
+      "tags": [
+         "tugas"
+      ],
+      "completed_at": "2017-05-17T08:27:13.290Z"
+   },
+   {
+      "id": 2,
+      "task": "tidur sebelum jam 3pagi",
+      "completed": false,
+      "created_at": "2017-05-06T07:09:32.551Z",
+      "tags": [],
+      "completed_at": "2017-05-15T04:47:39.159Z"
+   }
+]

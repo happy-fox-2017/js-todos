@@ -9,7 +9,7 @@ class Model {
   addList(input) {
     if (input !== "" || input !== undefined) {
       let date = new Date()
-      let added = {id: `${this.readfile.length+1}`,task: input, completed: '[]', created_date: date.toString()};
+      let added = {id: `${this.readfile.length+1}`,task: input, completed: '[]', created_date: date.toString(),tag:[]};
       this.readfile.push(added);
       json.writeFileSync(this.file, this.readfile)
     }
@@ -26,7 +26,7 @@ class Model {
 
   completeList(input) {
     for (let i=0; i<this.readfile.length;i++) {
-      if (input === this.readfile[i].task) {
+      if (input === this.readfile[i].id) {
         this.readfile[i].completed = '[X]'
         json.writeFileSync(this.file, this.readfile)
       }
@@ -35,7 +35,7 @@ class Model {
 
   uncompleteList(input) {
     for (let i=0; i<this.readfile.length;i++) {
-      if (input === this.readfile[i].task) {
+      if (input === this.readfile[i].id) {
         this.readfile[i].completed = '[]'
         json.writeFileSync(this.file, this.readfile)
       }
@@ -43,14 +43,21 @@ class Model {
   }
 
   order(input) {
-    if (input === 'asc') {
-      this.readfile.sort(function(a, b){return new Date(a.created_date).getTime() - new Date(b.created_date).getTime()});
-      // json.writeFileSync(this.file, this.readfile)
-    } else if (input === 'desc') {
-      this.readfile.sort(function(a, b){return new Date(b.created_date).getTime() - new Date(a.created_date).getTime()});
+    let array = []
+    for (var i = 0; i < this.readfile.length; i++) {
+      if(this.readfile[i].completed === '[]') {
+        array.push(this.readfile[i])
+      }
+      // console.log(array);
     }
-    json.writeFileSync(this.file, this.readfile)
-    return this.readfile
+    if (input === 'asc') {
+      array.sort(function(a, b){return new Date(a.created_date).getTime() - new Date(b.created_date).getTime()});
+      // json.writeFileSync(this.file, array)
+    } else if (input === 'desc') {
+      array.sort(function(a, b){return new Date(b.created_date).getTime() - new Date(a.created_date).getTime()});
+    }
+    // json.writeFileSync(this.file, this.readfile)
+    return array
   }
 
   tag(input) {
@@ -90,7 +97,7 @@ class Controller {
 
   processing(input) {
   let value = argv[3];
-  // let option = argv[4]
+  let option = argv[4]
     if (input === undefined || input === "help") {
       this.view.showHelp();
     } else if (input === "list") {
@@ -108,8 +115,7 @@ class Controller {
       this.model.uncompleteList(value);
       this.view.viewUncompleted(value);
     } else if (input === "list:outstanding") {
-      this.model.order(value)
-      this.view.viewOrder(this.model.readfile)
+      this.view.viewOrder(this.model.order(value))
     } else if (input === "list:completed") {
       this.view.listCompleted(this.model.readfile)
     } else if (input === "tag") {
@@ -136,9 +142,13 @@ class View {
     console.log("\"list\" to see your todo(s)");
     console.log("\"add\" to add a list");
     console.log("\"delete\"  to erase one of your todo");
-    console.log("\"task\" to see a specified list");
     console.log("\"complete\" if you have completed one task");
     console.log("\"uncomplete\" if you want to undo the task");
+    console.log("\"list:outstanding\" + asc/desc to order your todo");
+    console.log("\"list:completed\"  to see your todo that is completed");
+    console.log("\"tag\" to add tag to your list");
+    console.log("\"filter:tag\" to see list with certain tag");
+
   }
 
   showList(input) {
@@ -197,6 +207,13 @@ class View {
   }
 
   listCompleted(input) {
+    if (argv[3] === 'asc') {
+      console.log('masuk');
+      input.sort(function(a, b){return new Date(a.created_date).getTime() - new Date(b.created_date).getTime()});
+      // json.writeFileSync(this.file, array)
+    } else if (argv[3] === 'desc') {
+      input.sort(function(a, b){return new Date(b.created_date).getTime() - new Date(a.created_date).getTime()});
+    }
     for (let i = 0; i < input.length; i++) {
       if (input[i].completed === '[X]') {
         console.log(`${input[i].id}. ${input[i].completed} ${input[i].task}

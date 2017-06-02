@@ -1,1 +1,4 @@
-[]
+[
+  {"id": 1, "task": "Bikin aplikasi", "status": 0},
+  {"id": 2, "task": "Main Node.js", "status": 1}
+]

@@ -5,6 +5,7 @@ class Todo {
     this.id = id;
     this.task = task;
     this._status = status;
+    this.tags = [];
   }
 
   get completed() {
@@ -20,6 +21,23 @@ class TodoDataService {
   getTodoList() {
     const data = this.readFile();
     return TodoDataService.parseToDo(JSON.parse(data));
+  }
+
+  save(todoList) {
+    this.saveFile(JSON.stringify(todoList));
+  }
+
+  addTodo(taskDescription) {
+    const todoList = this.getTodoList();
+    const todoId = todoList.length + 1;
+    const newTodo = new Todo(todoId, taskDescription);
+    todoList.push(newTodo);
+    this.save(todoList);
+  }
+
+  getTodoId() {
+    const todoList = this.getTodoList();
+    return todoList.length + 1;
   }
 
   static parseToDo(todoJSONArray) {

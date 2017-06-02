@@ -18,8 +18,8 @@ class TodoView {
       `);
   }
 
-  static showUnknownCommand() {
-    console.log('Unknown command.');
+  static showMessage(message) {
+    console.log(message);
   }
 
   static showTodoList(todoList) {

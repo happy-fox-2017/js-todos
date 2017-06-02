@@ -22,6 +22,9 @@ class TodoController {
       case 'list':
         this.handleListTodo();
         break;
+      case 'add':
+        this.handleAddTodo(description);
+        break;
       default:
         TodoController.handleUnknownCommand();
         break;
@@ -37,8 +40,13 @@ class TodoController {
     return TodoView.showTodoList(todoList);
   }
 
+  handleAddTodo(taskDescription) {
+    this.todoDataService.addTodo(taskDescription);
+    TodoView.showMessage(`Added ${taskDescription} to your TODO list...`);
+  }
+
   static handleUnknownCommand() {
-    TodoView.showUnknownCommand();
+    TodoView.showMessage('Unknown command.');
   }
 }
 

@@ -22,6 +22,14 @@ class TodoView {
     console.log(message);
   }
 
+  static showTodo(todo) {
+    console.log(todo);
+  }
+
+  static showError(message) {
+    console.log('\x1b[31m', message);
+  }
+
   static showTodoList(todoList) {
     for (const [index, todo] of todoList.entries()) {
       const completedMark = todo.completed ? 'X' : ' ';

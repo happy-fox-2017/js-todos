@@ -25,8 +25,17 @@ class TodoController {
       case 'add':
         this.handleAddTodo(commandArg1);
         break;
+      case 'task':
+        this.handleViewTodo(commandArg1);
+        break;
       case 'delete':
         this.handleDeleteTodo(commandArg1);
+        break;
+      case 'complete':
+        this.handleCompleteTodo(commandArg1);
+        break;
+      case 'uncomplete':
+        this.handleUncompleteTodo(commandArg1);
         break;
       default:
         TodoController.handleUnknownCommand();
@@ -50,7 +59,34 @@ class TodoController {
 
   handleDeleteTodo(taskId) {
     this.todoDataService.deleteTodo(taskId);
-    TodoView.showMessage(`Task with id ${taskId} has been deleted...`);
+    TodoView.showMessage(`Task with id (${taskId}) has been deleted...`);
+  }
+
+  handleViewTodo(taskId) {
+    try {
+      const todo = this.todoDataService.getTodoById(taskId);
+      TodoView.showTodo(todo);
+    } catch (err) {
+      TodoView.showError(err.toString());
+    }
+  }
+
+  handleCompleteTodo(taskId) {
+    try {
+      this.todoDataService.completeTodo(taskId);
+      TodoView.showMessage(`Task with id (${taskId}) has been completed...`);
+    } catch (err) {
+      TodoView.showError(err.toString());
+    }
+  }
+
+  handleUncompleteTodo(taskId) {
+    try {
+      this.todoDataService.UncompleteTodo(taskId);
+      TodoView.showMessage(`Task with id (${taskId}) changed to Uncompleted...`);
+    } catch (err) {
+      TodoView.showError(err.toString());
+    }
   }
 
   static handleUnknownCommand() {

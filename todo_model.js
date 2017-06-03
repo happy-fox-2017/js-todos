@@ -57,9 +57,6 @@ class TodoDataService {
     }
     return todoList;
   }
-  save(todoList) {
-    this.saveFile(JSON.stringify(todoList));
-  }
 
   getCompletedTodoList(sorting) {
     let todoList = this.getTodoList();
@@ -69,6 +66,12 @@ class TodoDataService {
     } else {
       todoList = todoList.sort((todo1, todo2) => todo1.completedAt - todo2.completedAt);
     }
+    return todoList;
+  }
+
+  getTodoListByTag(tag) {
+    let todoList = this.getTodoList();
+    todoList = todoList.filter(todo => todo.tags.indexOf(tag) !== -1);
     return todoList;
   }
 
@@ -123,6 +126,10 @@ class TodoDataService {
     }
     this.save(todoList);
     return foundTodo;
+  }
+
+  save(todoList) {
+    this.saveFile(JSON.stringify(todoList));
   }
 
   static reArrangeTodoId(todoList) {

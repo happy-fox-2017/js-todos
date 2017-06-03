@@ -47,7 +47,7 @@ class TodoController {
         this.handleAddTags(commandArg1, commands.slice(2));
         break;
       default:
-        TodoController.handleUnknownCommand();
+        this.handleExtendedCommand(commands);
         break;
     }
   }
@@ -100,23 +100,33 @@ class TodoController {
 
   handleListOutstanding(sorting) {
     const todoList = this.todoDataService.getOutstandingTodoList(sorting);
-    return TodoView.showTodoList(todoList);
+    TodoView.showTodoList(todoList);
   }
 
   handleListCompleted(sorting) {
     const todoList = this.todoDataService.getCompletedTodoList(sorting);
-    return TodoView.showTodoList(todoList);
+    TodoView.showTodoList(todoList);
   }
 
   handleAddTags(taskId, tags) {
     try {
       const modifiedTodo = this.todoDataService.addTags(taskId, tags);
-      TodoView.showMessage(`Tagged task : "${modifiedTodo.task}" with tags: ${modifiedTodo.tags.join(', ')}`);
+      TodoView.showMessage(`Tagged task "${modifiedTodo.task}" with tags: ${modifiedTodo.tags.join(', ')}`);
     } catch (err) {
       TodoView.showError(err.toString());
     }
   }
 
+  handleExtendedCommand(commands) {
+    const matchCommands = commands[0].match(/(filter):(\w+)/) || [];
+    if (matchCommands.length > 0 && matchCommands[1] === 'filter') {
+      const tag = matchCommands[2];
+      const todoList = this.todoDataService.getTodoListByTag(tag);
+      TodoView.showTodoList(todoList);
+    } else {
+      TodoController.handleUnknownCommand();
+    }
+  }
   static handleUnknownCommand() {
     TodoView.showMessage('Unknown command.');
   }

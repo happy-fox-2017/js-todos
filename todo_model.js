@@ -18,6 +18,10 @@ class Todo {
     return this._createdAt;
   }
 
+  get tags() {
+    return this._tags;
+  }
+
   complete() {
     this._completedAt = new Date();
     this._status = 1;
@@ -26,6 +30,10 @@ class Todo {
   uncomplete() {
     this._completedAt = null;
     this._status = 0;
+  }
+
+  addTag(tag) {
+    this._tags.push(tag);
   }
 }
 
@@ -103,6 +111,18 @@ class TodoDataService {
     let todoList = this.getTodoList();
     todoList = todoList.filter(todo => todo.id !== parseInt(todoId, 10));
     this.save(TodoDataService.reArrangeTodoId(todoList));
+  }
+
+  addTags(todoId, tags) {
+    const todoList = this.getTodoList();
+    const foundTodo = todoList.find(todo => todo.id === parseInt(todoId, 10));
+    if (foundTodo === undefined) throw new Error(`Todo with id: ${todoId} not found!.`);
+    for (let i = 0; i < tags.length; i += 1) {
+      const tag = tags[i];
+      foundTodo.addTag(tag);
+    }
+    this.save(todoList);
+    return foundTodo;
   }
 
   static reArrangeTodoId(todoList) {

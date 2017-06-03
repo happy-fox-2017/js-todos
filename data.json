@@ -1,1 +1,1 @@
-[{"id":1,"task":"hello","_status":1,"_tags":[],"_createdAt":"2017-06-03T02:22:16.291Z","_completedAt":"2017-06-03T02:47:29.342Z"},{"id":2,"task":"ZZZZZ","_status":0,"_tags":[],"_createdAt":"2017-06-03T02:43:54.357Z","_completedAt":null}]
+[{"id":1,"task":"hello","_status":1,"_tags":["waw","apa","aja","zzz","mmm","bbb"],"_createdAt":"2017-06-03T02:22:16.291Z","_completedAt":"2017-06-03T02:47:29.342Z"},{"id":2,"task":"ZZZZZ","_status":0,"_tags":[],"_createdAt":"2017-06-03T02:43:54.357Z","_completedAt":null}]

@@ -43,6 +43,9 @@ class TodoController {
       case 'list:completed':
         this.handleListCompleted(commandArg1);
         break;
+      case 'tag':
+        this.handleAddTags(commandArg1, commands.slice(2));
+        break;
       default:
         TodoController.handleUnknownCommand();
         break;
@@ -103,6 +106,15 @@ class TodoController {
   handleListCompleted(sorting) {
     const todoList = this.todoDataService.getCompletedTodoList(sorting);
     return TodoView.showTodoList(todoList);
+  }
+
+  handleAddTags(taskId, tags) {
+    try {
+      const modifiedTodo = this.todoDataService.addTags(taskId, tags);
+      TodoView.showMessage(`Tagged task : "${modifiedTodo.task}" with tags: ${modifiedTodo.tags.join(', ')}`);
+    } catch (err) {
+      TodoView.showError(err.toString());
+    }
   }
 
   static handleUnknownCommand() {

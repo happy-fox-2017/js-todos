@@ -5,18 +5,26 @@ class Todo {
     this.id = id;
     this.task = task;
     this._status = status;
-    this.tags = [];
+    this._tags = [];
+    this._createdAt = new Date();
+    this._completedAt = null;
   }
 
   get completed() {
     return this._status === 1;
   }
 
+  get createdAt() {
+    return this._createdAt;
+  }
+
   complete() {
+    this._completedAt = new Date();
     this._status = 1;
   }
 
   uncomplete() {
+    this._completedAt = null;
     this._status = 0;
   }
 }
@@ -31,6 +39,16 @@ class TodoDataService {
     return TodoDataService.parseToDo(JSON.parse(data));
   }
 
+  getOutstandingTodoList(sorting) {
+    let todoList = this.getTodoList();
+    todoList = todoList.filter(todo => !todo.completed);
+    if (sorting === 'DESC') {
+      todoList = todoList.sort((todo1, todo2) => todo2.createdAt - todo1.createdAt);
+    } else {
+      todoList = todoList.sort((todo1, todo2) => todo1.createdAt - todo2.createdAt);
+    }
+    return todoList;
+  }
   save(todoList) {
     this.saveFile(JSON.stringify(todoList));
   }
@@ -86,7 +104,13 @@ class TodoDataService {
   }
 
   static parseToDo(todoJSONArray) {
-    return todoJSONArray.map(todoJSON => new Todo(todoJSON.id, todoJSON.task, todoJSON._status));
+    return todoJSONArray.map((todoJSON) => {
+      const todo = new Todo(todoJSON.id, todoJSON.task, todoJSON._status);
+      todo._tags = todoJSON._tags;
+      todo._createdAt = new Date(todoJSON._createdAt);
+      todo._completedAt = todoJSON._completedAt;
+      return todo;
+    });
   }
 
   readFile() {

@@ -33,7 +33,7 @@ class TodoView {
   static showTodoList(todoList) {
     for (const [index, todo] of todoList.entries()) {
       const completedMark = todo.completed ? 'X' : ' ';
-      console.log(`${index + 1}. [${completedMark}] ${todo.task}`);
+      console.log(`${index + 1}. [${completedMark}] ${todo.task} | ${todo.createdAt}`);
     }
   }
 

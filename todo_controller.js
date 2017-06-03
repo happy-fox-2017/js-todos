@@ -37,6 +37,9 @@ class TodoController {
       case 'uncomplete':
         this.handleUncompleteTodo(commandArg1);
         break;
+      case 'list:outstanding':
+        this.handleListOutstanding(commandArg1);
+        break;
       default:
         TodoController.handleUnknownCommand();
         break;
@@ -87,6 +90,11 @@ class TodoController {
     } catch (err) {
       TodoView.showError(err.toString());
     }
+  }
+
+  handleListOutstanding(sorting) {
+    const todoList = this.todoDataService.getOutstandingTodoList(sorting);
+    return TodoView.showTodoList(todoList);
   }
 
   static handleUnknownCommand() {

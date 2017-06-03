@@ -13,7 +13,7 @@ class TodoController {
 
   processCommand(commands) {
     const command = commands[0];
-    const description = commands[0];
+    const commandArg1 = commands[1];
 
     switch (command) {
       case 'help':
@@ -23,7 +23,10 @@ class TodoController {
         this.handleListTodo();
         break;
       case 'add':
-        this.handleAddTodo(description);
+        this.handleAddTodo(commandArg1);
+        break;
+      case 'delete':
+        this.handleDeleteTodo(commandArg1);
         break;
       default:
         TodoController.handleUnknownCommand();
@@ -43,6 +46,11 @@ class TodoController {
   handleAddTodo(taskDescription) {
     this.todoDataService.addTodo(taskDescription);
     TodoView.showMessage(`Added ${taskDescription} to your TODO list...`);
+  }
+
+  handleDeleteTodo(taskId) {
+    this.todoDataService.deleteTodo(taskId);
+    TodoView.showMessage(`Task with id ${taskId} has been deleted...`);
   }
 
   static handleUnknownCommand() {

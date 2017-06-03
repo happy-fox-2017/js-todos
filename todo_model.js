@@ -35,9 +35,14 @@ class TodoDataService {
     this.save(todoList);
   }
 
-  getTodoId() {
-    const todoList = this.getTodoList();
-    return todoList.length + 1;
+  deleteTodo(todoId) {
+    let todoList = this.getTodoList();
+    todoList = todoList.filter(todo => todo.id !== parseInt(todoId, 10));
+    for (let i = 0; i < todoList.length; i += 1) {
+      const todo = todoList[i];
+      todo.id = i + 1;
+    }
+    this.save(todoList);
   }
 
   static parseToDo(todoJSONArray) {
@@ -51,7 +56,7 @@ class TodoDataService {
   saveFile(data) {
     fs.writeFile(this._fileName, data, (fileErr) => {
       if (fileErr) throw fileErr;
-      console.log('Saved!');
+      console.log('Files saved.');
     });
   }
 }

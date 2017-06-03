@@ -53,6 +53,17 @@ class TodoDataService {
     this.saveFile(JSON.stringify(todoList));
   }
 
+  getCompletedTodoList(sorting) {
+    let todoList = this.getTodoList();
+    todoList = todoList.filter(todo => todo.completed);
+    if (sorting === 'DESC') {
+      todoList = todoList.sort((todo1, todo2) => todo2.completedAt - todo1.completedAt);
+    } else {
+      todoList = todoList.sort((todo1, todo2) => todo1.completedAt - todo2.completedAt);
+    }
+    return todoList;
+  }
+
   addTodo(taskDescription) {
     const todoList = this.getTodoList();
     const todoId = todoList.length + 1;

@@ -40,6 +40,9 @@ class TodoController {
       case 'list:outstanding':
         this.handleListOutstanding(commandArg1);
         break;
+      case 'list:completed':
+        this.handleListCompleted(commandArg1);
+        break;
       default:
         TodoController.handleUnknownCommand();
         break;
@@ -94,6 +97,11 @@ class TodoController {
 
   handleListOutstanding(sorting) {
     const todoList = this.todoDataService.getOutstandingTodoList(sorting);
+    return TodoView.showTodoList(todoList);
+  }
+
+  handleListCompleted(sorting) {
+    const todoList = this.todoDataService.getCompletedTodoList(sorting);
     return TodoView.showTodoList(todoList);
   }
 

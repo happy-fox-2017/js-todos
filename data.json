@@ -1,1 +1,64 @@
-[{"id":0,"task":"makan nasi","complete":true,"dateCompleted":"2017-06-01T22:45:34.599Z","tag":["makan"]},{"id":1,"task":"makan sapi gulai","complete":true,"dateCompleted":"2017-06-01T22:45:08.908Z"},{"id":2,"task":"makan ajaah","complete":true,"dateCompleted":"2017-05-05T14:42:27.983Z","tag":["makan"]},{"id":3,"task":"makan siang","complete":false,"dateCompleted":"","tag":[]},{"id":4,"task":"makan ayam","complete":false,"dateCompleted":"","tag":[]},{"id":5,"task":"kerjain UI","complete":false,"dateCompleted":"","tag":["kerja"]}]
+[
+  {
+    "id": 0,
+    "task": "makan nasi",
+    "complete": false,
+    "dateCompleted": "",
+    "tag": [
+      "makan"
+    ]
+  },
+  {
+    "id": 2,
+    "task": "makan ajaah",
+    "complete": true,
+    "dateCompleted": "2017-05-05T14:42:27.983Z",
+    "tag": [
+      "makan"
+    ]
+  },
+  {
+    "id": 5,
+    "task": "kerjain UI",
+    "complete": true,
+    "dateCompleted": "2017-06-06T04:30:51.223Z",
+    "tag": [
+      "kerja"
+    ]
+  },
+  {
+    "id": 6,
+    "task": "makan lagi",
+    "complete": false,
+    "dateCompleted": "",
+    "tag": []
+  },
+  {
+    "id": 7,
+    "task": "makan ssss",
+    "complete": false,
+    "dateCompleted": "",
+    "tag": []
+  },
+  {
+    "id": 8,
+    "task": "maoppasdfa",
+    "complete": false,
+    "dateCompleted": "",
+    "tag": []
+  },
+  {
+    "id": 9,
+    "task": "sdfasdfasdf",
+    "complete": false,
+    "dateCompleted": "",
+    "tag": []
+  },
+  {
+    "id": 10,
+    "task": "new",
+    "complete": true,
+    "dateCompleted": "2017-06-06T04:26:57.642Z",
+    "tag": []
+  }
+]

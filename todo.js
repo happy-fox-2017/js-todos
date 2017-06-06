@@ -13,12 +13,12 @@ class Model {
 
   getData() {
     let jsonData = jsonfile.readFileSync(this.file)
-    return jsonData;
+    return jsonData
   }
 
   // save data adanya di kontroller ??
   saveData () {
-    jsonfile.writeFileSync(this.file, this.taskList)
+    jsonfile.writeFileSync(this.file, this.taskList, {spaces:2})
   }
 }
 
@@ -109,7 +109,8 @@ class Controller {
   }
 
   addTaskList (paramObj) {
-    paramObj.id = this.model.taskList.length;
+    let tasks = this.model.taskList
+    paramObj.id = tasks[tasks.length - 1].id + 1;
     this.model.taskList.push(paramObj);
     this.model.saveData()
   }
@@ -124,32 +125,33 @@ class Controller {
     this.model.saveData()
   }
 
-  filterByTag(paramObj, tag) {
+  filterByTag(tasks, tag) {
     let filteredArr = []
-    for (let i = 0; i < paramObj.length; i++) {
-      let tagArr = paramObj[i].tag;
-      if (tagArr == undefined) {
-        continue;
-      } else {
-        if (tagArr.indexOf(tag) != -1) {
-          filteredArr.push(paramObj[i]);
-        }
+    // return tasks with empty tags if user not defined the tag filter
+    tasks.filter( function (task) {
+      if(task.tag.length == 0 && !tag){
+        filteredArr.push(task) 
+      }else if(task.tag.includes(tag)){
+        filteredArr.push(task)
       }
-
-    }
-    return filteredArr;
+    })
+    return filteredArr
   }
 
-  complete (paramObjNum) {
-    this.model.taskList[paramObjNum].complete = true;
-    this.model.taskList[paramObjNum].dateCompleted = new Date();
-    this.model.saveData()
+  complete (paramObjNum, complete=true) {
+    let tasks = this.model.taskList
+    for(let i = 0; i < tasks.length; i++) {
+      let task = tasks[i]
+      if (task.id == paramObjNum) {
+        this.model.taskList[i].complete = complete;
+        this.model.taskList[i].dateCompleted = (complete == true) ? new Date() : '' ;
+        this.model.saveData()
+      }
+    }
   }
 
   uncomplete (paramObjNum) {
-    this.model.taskList[paramObjNum].complete = false;
-    this.model.taskList[paramObjNum].dateCompleted = ""
-    this.model.saveData()
+    this.complete(paramObjNum, false)
   }
 
   ascOutStanding (paramObj) {
@@ -229,6 +231,7 @@ class View {
   }
 
   showTaskDetail(arrObjTask, taskNum) {
+    // console.log(`objeknya : ${JSON.stringify(arrObjTask)}, nomor : ${taskNum}`);
     console.log(`Detail Task :\n`);
     console.log("id : ", arrObjTask[taskNum].id);
     console.log("Completed status : ", arrObjTask[taskNum].complete);

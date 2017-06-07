@@ -31,9 +31,11 @@ class TodoView {
   }
 
   static showTodoList(todoList) {
-    for (const [index, todo] of todoList.entries()) {
+    // for (const [index, todo] of todoList.entries()) {
+    for (let i = 0; i < todoList.length; i += 1) {
+      const todo = todoList[i];
       const completedMark = todo.completed ? 'X' : ' ';
-      console.log(`${index + 1}. [${completedMark}] ${todo.task} [${todo.tags.join(', ')}]`);
+      console.log(`${i + 1}. [${completedMark}] ${todo.task} [${todo.tags.join(', ')}]`);
     }
   }
 

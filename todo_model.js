@@ -18,6 +18,10 @@ class Todo {
     return this._createdAt;
   }
 
+  get completedAt() {
+    return this._completedAt;
+  }
+
   get tags() {
     return this._tags;
   }
@@ -146,7 +150,7 @@ class TodoDataService {
       const todo = new Todo(todoJSON.id, todoJSON.task, todoJSON._status);
       todo._tags = todoJSON._tags;
       todo._createdAt = new Date(todoJSON._createdAt);
-      todo._completedAt = todoJSON._completedAt;
+      todo._completedAt = new Date(todoJSON._completedAt);
       return todo;
     });
   }

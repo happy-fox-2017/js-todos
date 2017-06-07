@@ -49,9 +49,10 @@ class Model {
     fs.writeFileSync("data.json", json, "utf8");
   }
   
-  markUncomplete(data, taskID, status) {
+  markUncomplete(data, taskID, status, uncompletedDate) {
     let id = Number(taskID-1);
-    data[id]["completed"] = status;
+    data[id]["uncompleted"] = status;
+    data[id]["uncompleted_date"] = uncompletedDate;
     let json = JSON.stringify(data);
     fs.writeFileSync("data.json", json, "utf8");
   }
@@ -129,7 +130,8 @@ class View {
   }
   
   displayOutstanding(data) {
-    let sorting = data.sort((a, d) => a["created_date"] > d["created_date"]);
+    let filter = data.filter((element) => element["uncompleted"]);
+    let sorting = filter.sort((a, d) => a["uncompleted_date"] > d["uncompleted_date"]);
     console.log("Sorting by ascending:");
     return sorting.forEach((element, index) => console.log(`${index+1}. ${element["task"]}`));
   }
@@ -142,13 +144,13 @@ class View {
   
   displayCompletedAsc(data) {
     let filter = data.filter((element) => element["completed"]);
-    let sorting = filter.sort((a, d) => a["completed_date"] < d["completed_date"]);
+    let sorting = filter.sort((a, d) => d["completed_date"] < a["completed_date"]);
     console.log("Sorting by ascending:");
     return sorting.forEach((element, index) => console.log(`${index+1}. ${element["task"]}`));
   }
   
   displayCompletedDesc(data) {
-    let filter = data.filter((element) => ["completed"]);
+    let filter = data.filter((element) => element["completed"]);
     let sorting = filter.sort((a, d) => a["completed_date"] < d["completed_date"]);
     console.log("Sorting by descending");
     return sorting.forEach((element, index) => console.log(`${index+1}. ${element["task"]}`));
@@ -222,7 +224,7 @@ class Controller {
         return this._view.displayError(1);
       } else if (contentOrID > data.length) {
         return this._view.displayError(2);
-      } else if (tag != "") {
+      } else if (option != "") {
         this._view.displayTag2(data, contentOrID, tag1, tag2);
         return this._model.addTag2(data, contentOrID, tag1, tag2);
       } else {

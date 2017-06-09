@@ -36,8 +36,14 @@ class Controller{
   }
   
   add(todo){
+    let id = 0;
+    if (this.model.data.length===0){
+      id = 1;
+    }else{
+      id = this.model.data[this.model.data.length-1].id+1;
+    }
     this.model.data.push({
-      'id': this.model.data.length+1,
+      'id': id,
       'task': todo,
       'status': 'uncomplete',
       'created_at': new Date().toUTCString(),
@@ -74,6 +80,9 @@ class Controller{
   
   delete(id,data){
     if(data.length === 0){
+      this.view.kosongdelete()
+    }
+    if (id> this.model.data[this.model.data.length-1].id || id < this.model.data[0].id){
       this.view.kosongdelete()
     }
      
@@ -122,10 +131,11 @@ class Controller{
       }
     }
     data = undone
+    console.log(data);
     switch (order) {
-      case 'asc': data.sort((a,b) => new Date(b.created_at) < new Date(a.created_at));break
-      case 'dsc':data.sort((a,b) => new Date(a.created_at) < new Date(b.created_at));break       
-      default: data.sort((a,b) => new Date(b.created_at) < new Date(a.created_at));break        
+      case 'asc': data.sort((a,b) => (b.created_at) < (a.created_at));break
+      case 'dsc':data.sort((a,b) => (a.created_at) < (b.created_at));break       
+      default: data.sort((a,b) => (b.created_at) < (a.created_at));break        
     }
     if(data.length === 0){
       this.view.kosongtodo()
